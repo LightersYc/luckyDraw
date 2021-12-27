@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>抽奖</title>
+    <style>
+      .wrapper {
+        width: 300px;
+        height: 300px;
+        display: flex;
+        flex-wrap: wrap;
+        margin: auto;
+      }
+      .block {
+        width: 100px;
+        border: 1px solid;
+        box-sizing: border-box;
+        text-align: center;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .text {
+        min-height: 40px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <p class="text"></p>
+    <div class="wrapper">
+      <div class="block1 block">Dior999</div>
+      <div class="block2 block">iPhone13 ProMax</div>
+      <div class="block3 block">PS4游戏机</div>
+      <div class="block4 block">谢谢参与</div>
+      <div class="block5 block">开始抽奖</div>
+      <div class="block6 block">Ipad Pro2020</div>
+      <div class="block7 block">APPLE WATCH</div>
+      <div class="block8 block">兰蔻小黑瓶</div>
+      <div class="block9 block">SK-II神仙水</div>
+    </div>
+
+    <script>
+      let blocks = document.querySelectorAll('.block')
+
+      text = document.getElementsByClassName('text')
+
+      arr = [0, 1, 2, 5, 8, 7, 6, 3] //色块运动方向
+
+      currentIndex = 0 //当前色块
+
+      count = 0 //计数器
+
+      intervalId = null //定时器
+
+      flag = false
+
+      rand = Math.floor(Math.random() * 8 + 50) //每轮的随机时间
+
+      let around = () => {
+        for (let i = 0; i < arr.length; i++) {
+          blocks[arr[i]].style.background = '#fff'
+        }
+
+        blocks[arr[currentIndex]].style.background = 'pink'
+
+        currentIndex++
+
+        if (currentIndex === arr.length) {
+          currentIndex = 0
+        }
+
+        count++ // count是一个计数器 根据count的值来调整速度
+        // 下面的4个if根据count的值来关闭计时器和重启计时器 改变计时器的时间间隔
+        if (count === 5 || count === 45) {
+          clearInterval(intervalId)
+          intervalId = setInterval(around, 200)
+        }
+        if (count === 10 || count === 35) {
+          clearInterval(intervalId)
+          intervalId = setInterval(around, 100)
+        }
+        if (count === 15) {
+          clearInterval(intervalId)
+          intervalId = setInterval(around, 50)
+        }
+        // 当等于上面的随机数时，停止计时器
+        if (count === rand) {
+          clearInterval(intervalId)
+          flag = false
+          const i = arr[currentIndex - 1]
+          console.log(blocks[i].innerHTML)
+          console.log(text)
+          text[0].innerHTML = `恭喜抽中${blocks[i].innerHTML}`
+        }
+      }
+      blocks[4].onclick = function () {
+        if (flag) return
+        flag = true
+        text[0].innerHTML = ''
+        currentIndex = 0
+        intervalId = setInterval(() => {
+          around()
+        }, 100)
+      }
+    </script>
+  </body>
+</html>
